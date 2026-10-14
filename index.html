@@ -1,0 +1,305 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>AI Gaming &amp; Procedural Animation Lab · Gemini 4 程序化动画与可验证游戏工程实验室</title>
+  <script>
+    (() => {
+      const param = new URLSearchParams(window.location.search).get("scoutTheme");
+      const theme =
+        param || (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+      document.documentElement.setAttribute("data-theme", theme);
+    })();
+  </script>
+  <link rel="stylesheet" href="./assets/theme.css">
+</head>
+<body>
+<main class="shell">
+  <nav class="topline" aria-label="实验室主导航">
+    <div>
+      <strong>AI GAMING &amp; PROCEDURAL ANIMATION LAB</strong>
+      <span class="mono" style="margin-left:10px;font-size:12px;color:var(--cp-text-muted)">Gemini 4 Engineering Showcase</span>
+    </div>
+    <div class="topline-actions">
+      <button type="button" id="theme-toggle-btn" aria-label="切换明暗主题">切换主题 (Light / Dark)</button>
+      <a class="button" href="./demos/wanan-midnight/">湾岸 Midnight 在线玩 →</a>
+      <a class="button" href="./demos/scrap-swarm/">Scrap Swarm 在线玩 →</a>
+      <a class="button" href="https://github.com/turbo998/ai-gaming-lab">GitHub ↗</a>
+    </div>
+  </nav>
+
+  <header style="margin-top:36px">
+    <p class="eyebrow">AI GAMING &amp; PROCEDURAL ANIMATION LAB · BENCHMARKING GEMINI 4 VS OPUS 5.5 ANIMATION</p>
+    <h1>从单段视觉动画到可验证的实时三维与机甲游戏工程</h1>
+    <p class="lead">
+      面向合作伙伴与解决方案架构师的技术演示门户：类比 Opus 5.5 的高表现力视觉动画能力，全方位展示 <strong>Gemini 4</strong> 如何进一步跨越单次补间动画，直接交付<strong>「参数化 3D/2D 几何建模 + 物理/骨骼耦合程序化动画 + 多幕互动剧情 + Web Audio 实时声学合成 + 60Hz 确定性验证 Harness」</strong>的完整可玩游戏工程。
+    </p>
+    <div class="lab-facts" aria-label="实验室核心工程指标">
+      <div class="fact-pill">
+        <strong>8 车系 / 44 代</strong>
+        <span>参数化 JDM 曲面建模、轮拱开孔拓扑与可动跳灯机构</span>
+      </div>
+      <div class="fact-pill">
+        <strong>5 类多关节机甲</strong>
+        <span>履带滚轮、液压后坐力抛壳、番剧切入与黑白冲击帧</span>
+      </div>
+      <div class="fact-pill">
+        <strong>6 章 + 3 幕剧情</strong>
+        <span>《零点以东》回声声档 &amp; 《废土斗机祭》铁冠救援反转</span>
+      </div>
+      <div class="fact-pill">
+        <strong>60Hz / 0 外部 API</strong>
+        <span>确定性物理步进、比赛期 0 动态建网、Bot 自动通关验证</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- 核心模块一：Interactive Procedural Animation Benchmark Stage -->
+  <section class="stage-card" aria-labelledby="stage-heading">
+    <div class="stage-header">
+      <div>
+        <span class="eyebrow">01 / INTERACTIVE PROCEDURAL ANIMATION BENCHMARK STAGE</span>
+        <h2 id="stage-heading" style="margin:6px 0 4px">实时程序化动画与建模拆解舞台</h2>
+        <p style="margin:0;color:var(--cp-text-muted);font-size:14px">
+          无需跳转即可现场向合作伙伴拆解双引擎底层机制：切换三大检视模式并点击下方机械/演出开关，实时观察顶点、骨骼、粒子与声学频谱响应。
+        </p>
+      </div>
+      <div class="stage-tabs" role="tablist" aria-label="动画拆解引擎切换">
+        <button type="button" role="tab" id="tab-wanan" data-stage-tab="wanan" aria-selected="true" aria-pressed="true">
+          1. 3D JDM 参数曲面与机械动画 (Wanan Engine)
+        </button>
+        <button type="button" role="tab" id="tab-scrap" data-stage-tab="scrap" aria-selected="false" aria-pressed="false">
+          2. 2D 多关节机甲骨骼与冲击帧 (Scrap Engine)
+        </button>
+        <button type="button" role="tab" id="tab-echo" data-stage-tab="echo" aria-selected="false" aria-pressed="false">
+          3. 程序化声波合成与多幕叙事 (Echo &amp; Comms)
+        </button>
+      </div>
+    </div>
+
+    <div class="stage-viewport-wrap">
+      <canvas id="benchmark-stage" width="1200" height="500" aria-label="实时程序化动画拆解画布"></canvas>
+      <div class="stage-hud-overlay">
+        <div class="hud-badge" id="stage-hud-left">
+          <strong>ENGINE: WANAN-3D-PARAMETRIC</strong><br>
+          <span id="stage-hud-summary">车辆：RX-7 FD3S · 跳灯开合 + 60Hz 俯仰侧倾 + 双出回火</span>
+        </div>
+        <div class="hud-badge mono" id="stage-hud-right">
+          <span id="stage-hud-telemetry">FPS Target: 60Hz | Runtime LLM API: 0 | Mesh Alloc in Race: 0</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="stage-controls-bar" id="stage-controls-wanan" data-panel="wanan">
+      <div class="control-row">
+        <span class="control-label">JDM 车型切换</span>
+        <button type="button" data-car-id="fd3s" aria-pressed="true">RX-7 FD3S (跳灯双转子跑车)</button>
+        <button type="button" data-car-id="bnr34" aria-pressed="false">Skyline GT-R BNR34 (直六双涡轮四驱)</button>
+        <button type="button" data-car-id="na1" aria-pressed="false">NSX NA1 (中置V6铝合金跳灯)</button>
+      </div>
+      <div class="control-row">
+        <span class="control-label">机械与动画拆解</span>
+        <button type="button" data-wanan-toggle="popupLights" aria-pressed="true">跳灯开合机构 (Pop-up Headlights Actuation)</button>
+        <button type="button" data-wanan-toggle="suspensionDynamics" aria-pressed="true">加减速俯仰与过弯侧倾 (Pitch/Dive &amp; Roll Suspension)</button>
+        <button type="button" data-wanan-toggle="exhaustAndRotors" aria-pressed="true">换挡双出蓝紫回火与刹车盘灼热 (Exhaust Backfire &amp; Glowing Rotors)</button>
+        <button type="button" data-wanan-toggle="wireframeTopology" aria-pressed="false">线框拓扑与轮拱开孔检视 (Wireframe &amp; Wheel-Arch Topology)</button>
+      </div>
+    </div>
+
+    <div class="stage-controls-bar" id="stage-controls-scrap" data-panel="scrap" hidden>
+      <div class="control-row">
+        <span class="control-label">机甲与骨骼拆解</span>
+        <button type="button" data-scrap-toggle="hydraulicRecoil" aria-pressed="true">履带滚轮与爆铆枪液压后坐力抛壳 (Hydraulic Recoil &amp; Shell Ejection)</button>
+        <button type="button" data-scrap-toggle="coreDashOverdrive" aria-pressed="true">炉心冲刺残影与黄金觉醒斗气 (Core Dash Afterimages &amp; Overdrive Aura)</button>
+        <button type="button" data-scrap-toggle="hectorLockShatter" aria-pressed="true">赫克托三阶段与铁冠锁具破甲裂解 (Hector Iron-Crown Lock Shatter)</button>
+        <button type="button" data-scrap-toggle="animeCutInImpact" aria-pressed="false">番剧横向切入特写与黑白冲击帧 (Anime Cut-in &amp; Impact Frame)</button>
+      </div>
+    </div>
+
+    <div class="stage-controls-bar" id="stage-controls-echo" data-panel="echo" hidden>
+      <div class="control-row">
+        <span class="control-label">叙事与声学通道</span>
+        <button type="button" data-echo-preset="shanghai" aria-pressed="true">湾岸回声磁带 · 卢浦大桥转子高转声档</button>
+        <button type="button" data-echo-preset="ironcrown" aria-pressed="false">废土无线电剧场 · 铁冠救援日志三幕反转</button>
+        <button type="button" data-echo-preset="harness" aria-pressed="false">60Hz 确定性帧探针与零运行时 API 守卫</button>
+      </div>
+      <div class="control-row">
+        <span class="control-label">声波与剧场交互</span>
+        <button type="button" data-echo-toggle="webAudioSynth" aria-pressed="false">启动/静音实时 Web Audio 合成声浪 (Procedural Synth)</button>
+        <button type="button" data-echo-toggle="tunnelReverb" aria-pressed="true">卢浦隧道混响与多普勒滤波 (Tunnel Delay &amp; Filter)</button>
+        <button type="button" data-echo-toggle="branchStep" id="echo-advance-btn">推进叙事状态机节点 (Advance Story Node →)</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- 核心模块二：双旗舰在线可玩作品入口 -->
+  <section aria-labelledby="flagships-heading">
+    <span class="eyebrow">02 / PLAYABLE FLAGSHIP DEMOS</span>
+    <h2 id="flagships-heading">双旗舰在线可玩作品入口</h2>
+    <p class="lead">
+      两部作品均为纯代码构建、零商业外部美术资产、零运行时大模型调用的完整可玩工程，支持直接在浏览器中畅玩与检视。
+    </p>
+
+    <div class="grid-2">
+      <article class="card">
+        <span class="eyebrow">FLAGSHIP 01 // THREE.JS WEBGL2 NIGHT HIGHWAY RACING</span>
+        <h2>《湾岸 Midnight · 零点以东》(Wanan Midnight — East of Zero Shanghai Story)</h2>
+        <p>
+          基于 Three.js WebGL2 的原创深夜高架竞速游戏。涵盖 8 大车系 44 代经典 JDM 参数化开放曲面车身、独立轮拱开孔、可动跳灯机构、加减速俯仰/过弯侧倾、换挡双出蓝紫回火与刹车盘灼热发光；内置上海篇六章原创剧情《零点以东》与「回声车间」磁带声档叙事，全流程 60Hz 确定性物理步进。
+        </p>
+        <div class="tag-list" aria-label="湾岸 Midnight 技术标签">
+          <span class="tag">Three.js WebGL2</span>
+          <span class="tag">8车系44代JDM程序化曲面</span>
+          <span class="tag">可动跳灯/悬挂俯仰/排气回火</span>
+          <span class="tag">上海篇6章原创剧情与回声声档</span>
+          <span class="tag">60Hz确定性物理</span>
+        </div>
+        <div class="card-actions">
+          <a class="button primary" href="./demos/wanan-midnight/">在线畅玩 Wanan Midnight →</a>
+          <a class="button" href="./research/wanan-midnight-technical-assets.html">技术资产沉淀文档</a>
+          <a class="button" href="https://github.com/turbo998/wanan-midnight">源码仓库 (turbo998/wanan-midnight) ↗</a>
+        </div>
+      </article>
+
+      <article class="card">
+        <span class="eyebrow">FLAGSHIP 02 // PHASER 3 PROCEDURAL MECHA ARENA</span>
+        <h2>《废土斗机祭 · Scrap Swarm》(Scrap Swarm — Iron-Crown Arena)</h2>
+        <p>
+          基于 Phaser 3 的纯几何多关节废土机甲竞技场动作游戏。操控绿溪公路维护机 R-17「锻火拳」迎战三波改造敌机与冠军机「铁冠·赫克托」。实装履带滚轮、三段液压爆铆枪后坐力与抛壳、炉心冲刺残影（Space）、觉醒番剧横向切入特写（Q）与黑白冲击帧演出、场地中间维修棚护卫事件与三幕无线电反转剧情。
+        </p>
+        <div class="tag-list" aria-label="Scrap Swarm 技术标签">
+          <span class="tag">Phaser 3 纯几何多关节机甲</span>
+          <span class="tag">番剧切入与冲击帧演出</span>
+          <span class="tag">炉心冲刺与维修棚护卫事件</span>
+          <span class="tag">三幕反转无线电剧场</span>
+          <span class="tag">固定种子60Hz与Bot自动通关验证</span>
+        </div>
+        <div class="card-actions">
+          <a class="button primary" href="./demos/scrap-swarm/">在线畅玩 Scrap Swarm →</a>
+          <a class="button" href="./demos/scrap-swarm/design/">角色与机体设定集 (Hangar) →</a>
+          <a class="button" href="./research/scrap-swarm-technical-assets.html">技术资产沉淀文档</a>
+          <a class="button" href="https://github.com/turbo998/scrap-swarm">源码仓库 (turbo998/scrap-swarm) ↗</a>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <!-- 核心模块三：Gemini 4 动画与游戏工程能力矩阵 -->
+  <section aria-labelledby="matrix-heading">
+    <span class="eyebrow">03 / GEMINI 4 VS OPUS 5.5 ANIMATION CAPABILITY MATRIX</span>
+    <h2 id="matrix-heading">Gemini 4 动画与游戏工程能力矩阵（对标并跨越单段动画制作）</h2>
+    <p class="lead">
+      传统代码生成演示往往停留在“单段不可交互的 SVG/Canvas 补间动画”。本实验室通过双旗舰项目证明：Gemini 4 不仅具备细腻的番剧级关键帧与机械运动表现力，更能将其纳入<strong>参数化几何拓扑、确定性物理仿真与自动化回归验证闭环</strong>。
+    </p>
+
+    <div class="matrix-table-wrap">
+      <table class="matrix-table" aria-label="Gemini 4 动画与游戏工程能力对比表">
+        <thead>
+          <tr>
+            <th>工程维度</th>
+            <th>传统单段视觉动画 (Baseline / 单次补间演示)</th>
+            <th>Gemini 4 程序化三维与机甲工程 (AI Gaming Lab 标准)</th>
+            <th>双旗舰可验证落地指标</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>1. 几何与建模层</strong><br><span class="mono">Geometry &amp; Topology</span></td>
+            <td>使用简单矩形/圆球拼接，缺乏真实机械比例、车体肩线曲率与关节层级连接。</td>
+            <td><strong>参数化样条曲面 + 轮拱开孔拓扑 + 可动跳灯铰链 + 多关节机甲骨骼树</strong>。不同车型与机甲由真实参数驱动独立顶点与部件层级。</td>
+            <td><strong>44 代 JDM 跑车</strong>（含 BNR34 4600×1780×1360mm 锚点、FD3S/NA1 跳灯）+ <strong>5 类多关节废土机甲</strong>，0 外部商业模型。</td>
+          </tr>
+          <tr>
+            <td><strong>2. 动画与演出层</strong><br><span class="mono">Procedural Animation</span></td>
+            <td>固定时间轴线性补间（Tween），不受物理受力、速度、转向或攻击后坐力反馈影响。</td>
+            <td><strong>物理耦合姿态（Pitch/Roll/Dive）+ 液压后坐力抛壳 + 残影分身 + 番剧 Cut-in 与黑白冲击帧（Impact Frames）</strong>。</td>
+            <td>高架急刹前倾/过弯侧倾、换挡双出蓝紫回火、刹车盘灼热发光；R-17 液压抛壳、金青冲刺残影、赫克托铁冠锁碎裂。</td>
+          </tr>
+          <tr>
+            <td><strong>3. 叙事与声学层</strong><br><span class="mono">Narrative &amp; Web Audio</span></td>
+            <td>无剧情或静态文本卡片；依赖外部 MP3 音频素材或完全静音。</td>
+            <td><strong>多分支叙事状态机 + 零外部音频 Web Audio 实时合成器</strong>（转子/直六/V6 声浪、隧道混响、机甲液压铆击与电弧声）。</td>
+            <td>《零点以东》6 章回声车间声档（领跑者/同行者/抵达者三结局）+ 《废土斗机祭》3 幕铁冠救援日志反转。</td>
+          </tr>
+          <tr>
+            <td><strong>4. 工程验证层</strong><br><span class="mono">Deterministic Harness</span></td>
+            <td>靠人工“肉眼看一眼动画”，无确定性时钟、无内存分配守卫、无自动化通关测试。</td>
+            <td><strong>固定 60Hz 步进探针（<code>__wananTest</code> / <code>__gameTest</code> / <code>__labStage</code>）+ 比赛期 0 动态建网守卫 + Bot 自动通关</strong>。</td>
+            <td>30/60/120Hz 跨帧率确定性一致，88 视角快照回归，Bot 180 秒内自动击败 3 阶段 Boss 并通过 Playwright E2E。</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- 核心模块四：合作伙伴 5 分钟现场演示动线 -->
+  <section aria-labelledby="playbook-heading">
+    <span class="eyebrow">04 / 5-MINUTE PARTNER DEMO PLAYBOOK</span>
+    <h2 id="playbook-heading">合作伙伴 5 分钟现场演示动线</h2>
+    <p class="lead">
+      面向客户高管、游戏工作室技术总监与云架构合作伙伴的标准 5 分钟现场演示脚本，支持离线/内网一键复现。
+    </p>
+
+    <div class="grid-4">
+      <article class="card">
+        <span class="step-number">STEP 01 · 0:00 – 1:00</span>
+        <h3>首页实时动画舞台拆解</h3>
+        <p>
+          在本页上方舞台依次切换 <strong>3D JDM 曲面</strong>（演示 FD3S 跳灯开合、悬挂俯仰、换挡回火与线框拓扑）、<strong>2D 机甲骨骼</strong>（演示 R-17 液压抛壳、冲刺残影与番剧黑白冲击帧）与<strong>回声磁带合成器</strong>。
+        </p>
+      </article>
+
+      <article class="card">
+        <span class="step-number">STEP 02 · 1:00 – 2:30</span>
+        <h3>湾岸车间检视与卢浦夜战</h3>
+        <p>
+          点击进入《湾岸 Midnight》，在回声车间切换 BNR34 / FD3S / NA1 检视轮拱开孔与跳灯机构；开启《零点以东》第 1 章《末班灯》，体验磁带声档叙事与 6km 上海高架过弯侧倾、刹车盘灼热与双出回火。
+        </p>
+      </article>
+
+      <article class="card">
+        <span class="step-number">STEP 03 · 2:30 – 4:00</span>
+        <h3>废土机甲冲刺与番剧演出</h3>
+        <p>
+          点击进入《废土斗机祭》，操控 R-17 施展<strong>炉心冲刺（Space）</strong>与<strong>炉心觉醒番剧切入（Q）</strong>，观察爆铆枪后坐力抛壳、场地中间维修棚护卫事件，以及三幕无线电剧情揭晓「铁冠·赫克托」救援机真相。
+        </p>
+      </article>
+
+      <article class="card">
+        <span class="step-number">STEP 04 · 4:00 – 5:00</span>
+        <h3>机库设定集与验证 Harness</h3>
+        <p>
+          打开《废土斗机祭》<strong>角色与机体设定集</strong>，在巡航/攻击/觉醒/破甲四态间实时切换检视五台机甲骨骼；最后展示四篇技术资产白皮书与 Playwright 确定性验证报告。
+        </p>
+      </article>
+    </div>
+  </section>
+
+  <!-- 核心模块五：系统化技术资产文档 -->
+  <section aria-labelledby="research-heading">
+    <span class="eyebrow">05 / TECHNICAL ASSETS &amp; ARCHITECTURE WHITEPAPERS</span>
+    <h2 id="research-heading">系统化技术资产沉淀与复现文档</h2>
+    <p class="lead">
+      所有建模参数、骨骼状态机公式、叙事分支设计、Web Audio 合成拓扑与确定性验证方法均已整理为可独立阅读的技术白皮书：
+    </p>
+    <div class="controls" style="margin:20px 0 32px">
+      <a class="button primary" href="./research/gemini4-animation-and-game-engineering.html">1. Gemini 4 动画与游戏工程白皮书 (对标 Opus 5.5) →</a>
+      <a class="button" href="./research/wanan-midnight-technical-assets.html">2. wanan-midnight 技术资产沉淀 (44车曲面/跳灯/上海篇6章)</a>
+      <a class="button" href="./research/scrap-swarm-technical-assets.html">3. scrap-swarm 技术资产沉淀 (多关节机甲/冲击帧/60Hz Harness)</a>
+      <a class="button" href="./research/partner-demo-playbook.html">4. 合作伙伴演示手册 (3分钟速览与10分钟深潜脚本)</a>
+    </div>
+  </section>
+
+  <footer>
+    <span>AI Gaming &amp; Procedural Animation Lab · 原创 MIT 代码 · 零运行时大模型 API · 60Hz 确定性验证工程</span>
+    <span>
+      <a href="https://github.com/turbo998/ai-gaming-lab">ai-gaming-lab ↗</a> ·
+      <a href="https://github.com/turbo998/wanan-midnight">wanan-midnight ↗</a> ·
+      <a href="https://github.com/turbo998/scrap-swarm">scrap-swarm ↗</a>
+    </span>
+  </footer>
+</main>
+<script type="module" src="/src/main.ts"></script>
+</body>
+</html>

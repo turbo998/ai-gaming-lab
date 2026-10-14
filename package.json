@@ -1,0 +1,21 @@
+{
+  "name": "ai-gaming-lab",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host 127.0.0.1 --port 4330",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run tests/portal.test.ts",
+    "build": "vite build && node scripts/assemble.mjs",
+    "test:e2e": "playwright test",
+    "check": "npm run typecheck && npm run test && npm run build && npm run test:e2e"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.52.0",
+    "@types/node": "^22.10.0",
+    "typescript": "^5.7.2",
+    "vite": "^6.2.0",
+    "vitest": "^3.0.7"
+  }
+}
