@@ -23,6 +23,9 @@ test.describe('AI Gaming & Procedural Animation Lab Portal E2E', () => {
     const initialStage = await page.evaluate(() => window.__labStage?.getState());
     expect(initialStage?.activeTab).toBe('wanan');
     expect(initialStage?.selectedCar).toBe('fd3s');
+    await expect(page.locator('#stage-controls-wanan')).toBeVisible();
+    await expect(page.locator('#stage-controls-scrap')).toBeHidden();
+    await expect(page.locator('#stage-controls-echo')).toBeHidden();
 
     await page.click('[data-car-id="bnr34"]');
     await page.click('[data-wanan-toggle="wireframeTopology"]');
@@ -40,6 +43,9 @@ test.describe('AI Gaming & Procedural Animation Lab Portal E2E', () => {
     expect(afterScrapToggle?.activeTab).toBe('scrap');
     expect(afterScrapToggle?.scrap.animeCutInImpact).toBe(true);
     await expect(page.locator('#stage-hud-left')).toContainText('R-17 VS HECTOR');
+    await expect(page.locator('#stage-controls-wanan')).toBeHidden();
+    await expect(page.locator('#stage-controls-scrap')).toBeVisible();
+    await expect(page.locator('#stage-controls-echo')).toBeHidden();
 
     await page.screenshot({ path: 'docs/evidence/portal-stage-scrap-dark.png', fullPage: false });
 
@@ -52,6 +58,9 @@ test.describe('AI Gaming & Procedural Animation Lab Portal E2E', () => {
     expect(afterEchoToggle?.echoPreset).toBe('ironcrown');
     expect(afterEchoToggle?.echo.storyNodeIndex).toBe(1);
     await expect(page.locator('#stage-hud-left')).toContainText('ACT II // 焊死封盖');
+    await expect(page.locator('#stage-controls-wanan')).toBeHidden();
+    await expect(page.locator('#stage-controls-scrap')).toBeHidden();
+    await expect(page.locator('#stage-controls-echo')).toBeVisible();
 
     // Toggle theme to light mode
     await page.click('#theme-toggle-btn');

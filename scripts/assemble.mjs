@@ -166,8 +166,8 @@ for (const file of await readdir('docs')) {
 // Sync wanan-midnight demo into public/demos/wanan-midnight and dist/demos/wanan-midnight
 const wananCandidates = [
   process.env.WANAN_DIST_DIR,
-  resolve('../copilot-worktrees/wanan-midnight/turbo998-expert-train/dist'),
   resolve('../wanan-midnight/dist'),
+  resolve('../copilot-worktrees/wanan-midnight/turbo998-expert-train/dist'),
   resolve('public/demos/wanan-midnight'),
 ].filter(Boolean);
 

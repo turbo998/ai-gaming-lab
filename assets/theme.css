@@ -227,6 +227,9 @@ h3 {
   flex-direction: column;
   gap: 14px;
 }
+[hidden], .stage-controls-bar[hidden] {
+  display: none !important;
+}
 .control-row {
   display: flex;
   flex-wrap: wrap;
